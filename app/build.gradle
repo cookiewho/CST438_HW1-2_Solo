@@ -2,6 +2,11 @@ plugins {
     id 'com.android.application'
 }
 
+def passwordPropertiesFile = rootProject.file("passwords.properties")
+def passwordProperties = new Properties()
+passwordProperties.load(new FileInputStream(passwordPropertiesFile))
+
+
 android {
     compileSdk 31
 
@@ -13,6 +18,8 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField("String", "TEST_KEY", passwordProperties['TEST_KEY'])
     }
 
     buildTypes {

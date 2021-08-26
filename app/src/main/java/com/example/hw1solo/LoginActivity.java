@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -19,12 +20,14 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+
 public class LoginActivity extends AppCompatActivity {
     private  TextView alertBox;
     private EditText username;
     private EditText password;
     private Button btnLogin;
-    private List<String> validUsernames;
+    private List<String> validUsernames = new ArrayList<>();
+    String correctPassword = BuildConfig.TEST_KEY;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,24 +67,47 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String username_found = "";
-                Boolean password_matches = false;
-                for (String validUsername: validUsernames) {
-                    if (validUsername.equals(username)) {
-                        username_found = validUsername;
+                alertBox.setText("");
+                alertBox.setBackgroundColor(parseColor("#80000000"));
+                username.setBackgroundColor(parseColor("#80000000"));
+                password.setBackgroundColor(parseColor("#80000000"));
+
+
+                if (usernameCheck(validUsernames, username.getText().toString())){
+                    if(passwordCheck(correctPassword, password.getText().toString())){
+                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                    }
+                    else{
+                        alertBox.setText("Password is invalid");
+                        alertBox.setBackgroundColor(parseColor("#F7FF282C"));
+                        password.setBackgroundColor(parseColor("#F7FF282C"));
                     }
                 }
-                if (username_found.equals("")){
+                else {
                     alertBox.setText("Username is invalid");
-                    alertBox.setBackgroundColor(parseColor("#FF282C"));
-                }
-                else{
-                    //check password
-                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                    alertBox.setBackgroundColor(parseColor("#F7FF282C"));
+                    username.setBackgroundColor(parseColor("#F7FF282C"));
                 }
             }
         });
 
 
+
+
+    }
+
+    public static boolean usernameCheck(List<String> validUsernames, String inputUsername){
+        for (String validUsername: validUsernames) {
+            if (validUsername.equals(inputUsername)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    public static boolean passwordCheck(String systemPassword, String inputPassword){
+        if (systemPassword.equals(inputPassword)) {
+            return true;
+        }
+        return false;
     }
 }
