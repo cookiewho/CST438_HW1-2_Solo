@@ -5,6 +5,7 @@ import static android.graphics.Color.parseColor;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -67,10 +68,11 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                int bgColor = android.R.color.background_light;
                 alertBox.setText("");
-                alertBox.setBackgroundColor(parseColor("#80000000"));
-                username.setBackgroundColor(parseColor("#80000000"));
-                password.setBackgroundColor(parseColor("#80000000"));
+                alertBox.setBackgroundColor(getResources().getColor(bgColor));
+                username.setBackgroundColor(getResources().getColor(bgColor));
+                password.setBackgroundColor(getResources().getColor(bgColor));
 
 
                 if (usernameCheck(validUsernames, username.getText().toString())){
