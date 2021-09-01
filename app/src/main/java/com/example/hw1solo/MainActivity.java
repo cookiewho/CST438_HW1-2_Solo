@@ -2,6 +2,8 @@ package com.example.hw1solo;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
 
@@ -15,6 +17,8 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
+    public static final String ACTIVITY_LABEL = "MAIN_ACTIVITY";
+    private TextView welcomeBanner;
     private TextView textViewResult;
 
     @Override
@@ -22,7 +26,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        int userId = getIntent().getIntExtra(ACTIVITY_LABEL+"USERID", -1);
+        String username = getIntent().getStringExtra(ACTIVITY_LABEL+"USERNAME");
+
+        welcomeBanner = findViewById(R.id.welcome_banner);
         textViewResult = findViewById(R.id.text_view_result);
+
+        welcomeBanner.setText("Welcome " + username + "!");
+
         Retrofit retrofit = new Retrofit.Builder().baseUrl("https://jsonplaceholder.typicode.com/").addConverterFactory(GsonConverterFactory.create()).build();
 
         JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
@@ -37,13 +48,14 @@ public class MainActivity extends AppCompatActivity {
                }
                List<Post> posts = response.body();
                for (Post post: posts) {
-                   String content = "";
-                   content += "ID: " + post.getId() + "\n";
-                   content += "User ID: " + post.getUserId() + "\n";
-                   content += "Title: " + post.getTitle() + "\n";
-                   content += "Text: " + post.getText() + "\n\n";
+                   if(post.getUserId() == userId) {
+                       String content = "";
+                       content += "Username: " + username + "\t\t\t\t\t\t\t\t\t\t\t\tUser ID: " + post.getUserId() + "\n";
+                       content += "Title: " + post.getTitle() + "\n";
+                       content += "Text: " + post.getText() + "\n\n";
 
-                   textViewResult.append(content);
+                       textViewResult.append(content);
+                   }
                }
             }
 
@@ -52,5 +64,12 @@ public class MainActivity extends AppCompatActivity {
                 textViewResult.setText(t.getMessage());
             }
         });
+    }
+
+    public  static Intent getIntent(Context context, int userId, String username){
+        Intent intent = new Intent(context, MainActivity.class);
+        intent.putExtra(MainActivity.ACTIVITY_LABEL+"USERID", userId);
+        intent.putExtra(MainActivity.ACTIVITY_LABEL+"USERNAME", username);
+        return intent;
     }
 }

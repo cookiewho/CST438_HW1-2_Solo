@@ -1,13 +1,13 @@
 package com.example.hw1solo;
 
 public class User {
-        private String id;
+        private int id;
         private String name;
         private String username;
         private String email;
 
 
-        public String getId() {
+        public int getId() {
                 return id;
         }
 
