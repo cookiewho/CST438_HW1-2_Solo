@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
         welcomeBanner = findViewById(R.id.welcome_banner);
         textViewResult = findViewById(R.id.text_view_result);
 
-        welcomeBanner.setText("Welcome " + username + "!");
+        welcomeBanner.setText("Welcome " + username + "! You are user #" + userId);
 
         Retrofit retrofit = new Retrofit.Builder().baseUrl("https://jsonplaceholder.typicode.com/").addConverterFactory(GsonConverterFactory.create()).build();
 
